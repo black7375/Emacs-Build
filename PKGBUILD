@@ -38,10 +38,10 @@
 #
 ################################################################################
 CHECK=            # Run tests. May fail, this is developement after all.
-CLANG="YES"            # Use clang.
-LTO="YES"              # Enable link-time optimization. Not that experimental anymore.
+CLANG="YES"       # Use clang.
+LTO="YES"         # Enable link-time optimization. Not that experimental anymore.
                   # Seems fixed in GCC, so I've reenabled binutils support, please
-		  # report any bug, to make it use clang by default again.
+                  # report any bug, to make it use clang by default again.
 CLI=              # CLI only binary.
 NOTKIT=           # Use no toolkit widgets. Like B&W Twm (001d sk00l).
 LUCID=            # Use the lucid, a.k.a athena, toolkit. Like XEmacs, sorta.
@@ -62,13 +62,13 @@ CAIRO="YES"       # GOOD NEWS! No longer experimental and fully supported.
                   # This is now, along with harfbuzz, the prefered font
                   # and text shaping engine.
                   # If using GTK+, you'll get printing for free.
-XWIDGETS="YES"         # Use GTK+ widgets pulled from webkit2gtk. Usable.
+XWIDGETS="YES"    # Use GTK+ widgets pulled from webkit2gtk. Usable.
 DOCS_HTML=        # Generate and install html documentation.
 DOCS_PDF=         # Generate and install pdf documentation.
 MAGICK=           # ImageMagick 7 support. Deprecated (read the logs).
-                  # ImageMagick, like flash, is a bug ridden pest that 
-		  # won't die;  yet it is useful if you know what you 
-		  #are doing.
+                  # ImageMagick, like flash, is a bug ridden pest that
+                  # won't die;  yet it is useful if you know what you
+                  # are doing.
                   # -->>If you just *believe* you need it, you don't.<<--
 NOGZ="YES"        # Don't compress .el files.
 FAST_BOOT=        # Only native-compile the bare minimum. Intended for use with
