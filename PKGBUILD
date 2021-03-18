@@ -39,6 +39,8 @@
 ################################################################################
 CHECK=            # Run tests. May fail, this is developement after all.
 CLANG="YES"       # Use clang.
+NO_DEBUG="YES"    # Don't create debug infos.
+NATIVE="YES"      # Target arch for native
 O3="YES"          # Use O3 Optimize
 LTO="YES"         # Enable link-time optimization. Not that experimental anymore.
                   # Seems fixed in GCC, so I've reenabled binutils support, please
@@ -74,12 +76,12 @@ MAGICK=           # ImageMagick 7 support. Deprecated (read the logs).
 NOGZ="YES"        # Don't compress .el files.
 FAST_BOOT=        # Only native-compile the bare minimum. Intended for use with
                   # deferred compilation to native-compile on-demand at runtime.
-PROFILING=        # Enable gprof profiling support.
+PROFILING="YES"   # Enable gprof profiling support.
 ################################################################################
 
 ################################################################################
 pkgname="emacs-native-comp-git-enhanced"
-pkgver=28.0.50.147297
+pkgver=28.0.50.147609
 pkgrel=1
 pkgdesc="GNU Emacs. Development native-comp branch and pgtk branch combined."
 arch=('x86_64' )
@@ -99,8 +101,24 @@ md5sums=('SKIP')
 
 ################################################################################
 
-CFLAGS+=" -g"
-CXXFLAGS+=" -g"
+## Compiler Options
+# https://gcc.gnu.org/onlinedocs/gcc/Option-Summary.html
+# https://gcc.gnu.org/onlinedocs/gcc/Option-Index.html
+# https://clang.llvm.org/docs/ClangCommandLineReference.html
+##
+
+if [[ $NO_DEBUG == "YES" ]]; then
+  CFLAGS+=" -g0"
+  CXXFLAGS+=" -g0"
+else
+  CFLAGS+=" -g"
+  CXXFLAGS+=" -g"
+fi
+
+if [[ $NATIVE == "YES" ]]; then
+  CFLAGS+=" -march=native"
+  CXXFLAGS+=" -march=native"
+fi
 
 if [[ $O3 == "YES" ]]; then
   CFLAGS+=" -O3"
@@ -115,11 +133,12 @@ if [[ $O3 == "YES" ]]; then
 fi
 
 if [[ $LTO == "YES" ]]; then
-  CFLAGS+=" -flto"
-  CXXFLAGS+=" -flto"
-  if [[ $CLANG != "YES" ]]; then
-    CFLAGS+=" -fuse-linker-plugin"
-    CXXFLAGS+=" -fuse-linker-plugin"
+  if [[ $CLANG == "YES" ]]; then
+    CFLAGS+=" -flto=full"
+    CXXFLAGS+=" -flto=full"
+  else
+    CFLAGS+=" -flto -fuse-linker-plugin"
+    CXXFLAGS+=" -flto -fuse-linker-plugin"
   fi
 fi
 
