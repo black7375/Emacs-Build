@@ -39,6 +39,7 @@
 ################################################################################
 CHECK=            # Run tests. May fail, this is developement after all.
 CLANG="YES"       # Use clang.
+O3="YES"          # Use O3 Optimize
 LTO="YES"         # Enable link-time optimization. Not that experimental anymore.
                   # Seems fixed in GCC, so I've reenabled binutils support, please
                   # report any bug, to make it use clang by default again.
@@ -97,6 +98,18 @@ md5sums=('SKIP')
 
 CFLAGS+=" -g"
 CXXFLAGS+=" -g"
+
+if [[ $O3 == "YES" ]]; then
+  CFLAGS+=" -O3"
+  CXXFLAGS+=" -O3"
+  if [[ $CLANG == "YES" ]]; then
+    # default: 225
+    # https://docs.rust-embedded.org/book/unsorted/speed-vs-size.html
+    # https://lists.llvm.org/pipermail/llvm-dev/2014-July/074373.html
+    CFLAGS+=" -mllvm -inline-threshold=275"
+    CXXFLAGS+=" -mllvm -inline-threshold=275"
+  fi
+fi
 
 if [[ $LTO == "YES" ]]; then
   CFLAGS+=" -flto"
