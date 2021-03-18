@@ -91,6 +91,9 @@ provides=('emacs' 'emacs-seq')
 conflicts=('emacs' 'emacs26-git' 'emacs-27-git' 'emacs-git' 'emacs-seq')
 replaces=('emacs26-git' 'emacs27-git' 'emacs-git' 'emacs-seq')
 source=("emacs-git::git://github.com/flatwhatson/emacs.git#branch=pgtk-nativecomp")
+# If Savannah access is blocked for reasons, use Github instead.
+# Edit the config file of your local repo copy as well.
+#source=("emacs-git::git://github.com/emacs-mirror/emacs.git")
 md5sums=('SKIP')
 ################################################################################
 
@@ -281,7 +284,7 @@ fi
 
 ################################################################################
 
-  ./configure CC='clang' "${_conf[@]}"
+  ./configure "${_conf[@]}"
 
   # Using "make" instead of "make bootstrap" enables incremental
   # compiling. Less time recompiling. Yay! But you may
@@ -295,7 +298,7 @@ fi
   if [[ $FAST_BOOT == "YES" ]]; then
     make -j$(nproc) NATIVE_FAST_BOOT=1
   else
-    make -j$(nproc)
+    make -j$(nproc) NATIVE_FULL_AOT=1
   fi
 
   # You may need to run this if 'loaddefs.el' files become corrupt.
