@@ -219,6 +219,46 @@ pkgver() {
 # Doing so, breaks incremental compilation.
 prepare() {
   cd "$srcdir/emacs-git"
+
+################################################################################
+  ## Git Setting
+  rm -rfv .git/hooks/commit-msg
+  git config pull.rebase off
+
+  set-remote() {
+    local name=$1
+    local url=$2
+
+    if git config "remote.${name}.url" > /dev/null; then
+      # Alreay exist
+      git remote set-url $name $url
+    else
+      # Don't exist
+      git remote add $name $url
+    fi
+  }
+
+  ## Patch from emacs repo
+  # Set Upstream
+  set-remote upstream https://github.com/emacs-mirror/emacs
+  git fetch upstream
+
+  # Merge feature/pgtk
+  git pull --no-edit upstream feature/pgtk
+
+  # Merge feature/native-comp
+  git pull --no-edit upstream feature/native-comp
+
+  # Merge master
+  git pull --no-edit upstream master
+
+  ## Patch Fast Emacs
+  set-remote fast-emacs https://github.com/geza-herman/emacs
+  git fetch fast-emacs
+  git pull --no-edit fast-emacs fast-emacs
+
+################################################################################
+
   [[ -x configure ]] || ( ./autogen.sh git && ./autogen.sh autoconf )
 }
 
