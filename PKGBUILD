@@ -1,6 +1,7 @@
-# Maintainer: Vitaly Ankh <https://aur.archlinux.org/account/VitalyAnkh>
+# Maintainer: MS Y <https://github.com/black7375>
 # Maintainer of emacs-git: Pedro A. López-Valencia <https://aur.archlinux.org/users/vorbote>
 # Maintainer of emacs-pgtk-native-comp: Andrew Whatson <https://aur.archlinux.org/account/flatwhatson>
+# Maintainer of emacs-native-comp-git-enhanced: Vitaly Ankh <https://aur.archlinux.org/account/VitalyAnkh>
 
 ################################################################################
 # The difference between this PKGBUILD and the one from `emacs-git` is that:
@@ -80,8 +81,8 @@ PROFILING="YES"   # Enable gprof profiling support.
 ################################################################################
 
 ################################################################################
-pkgname="emacs-native-comp-git-enhanced"
-pkgver=28.0.50.147609
+pkgname="fast-emacs"
+pkgver=28.0.50.147689
 pkgrel=1
 pkgdesc="GNU Emacs. Development native-comp branch and pgtk branch combined."
 arch=('x86_64' )
@@ -92,7 +93,9 @@ makedepends=('git')
 provides=('emacs' 'emacs-seq')
 conflicts=('emacs' 'emacs26-git' 'emacs-27-git' 'emacs-git' 'emacs-seq')
 replaces=('emacs26-git' 'emacs27-git' 'emacs-git' 'emacs-seq')
-source=("emacs-git::git://github.com/flatwhatson/emacs.git#branch=pgtk-nativecomp")
+source=("emacs-git::git://github.com/black7375/emacs")
+# If you want prev version
+# source=("emacs-git::git://github.com/flatwhatson/emacs.git#branch=pgtk-nativecomp")
 # If Savannah access is blocked for reasons, use Github instead.
 # Edit the config file of your local repo copy as well.
 #source=("emacs-git::git://github.com/emacs-mirror/emacs.git")
@@ -219,45 +222,6 @@ pkgver() {
 # Doing so, breaks incremental compilation.
 prepare() {
   cd "$srcdir/emacs-git"
-
-################################################################################
-  ## Git Setting
-  rm -rfv .git/hooks/commit-msg
-  git config pull.rebase off
-
-  set-remote() {
-    local name=$1
-    local url=$2
-
-    if git config "remote.${name}.url" > /dev/null; then
-      # Alreay exist
-      git remote set-url $name $url
-    else
-      # Don't exist
-      git remote add $name $url
-    fi
-  }
-
-  ## Patch from emacs repo
-  # Set Upstream
-  set-remote upstream https://github.com/emacs-mirror/emacs
-  git fetch upstream
-
-  # Merge feature/pgtk
-  git pull --no-edit upstream feature/pgtk
-
-  # Merge feature/native-comp
-  git pull --no-edit upstream feature/native-comp
-
-  # Merge master
-  git pull --no-edit upstream master
-
-  ## Patch Fast Emacs
-  set-remote fast-emacs https://github.com/geza-herman/emacs
-  git fetch fast-emacs
-  git pull --no-edit fast-emacs fast-emacs
-
-################################################################################
 
   [[ -x configure ]] || ( ./autogen.sh git && ./autogen.sh autoconf )
 }
