@@ -1,0 +1,37 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+    unix-test:
+        strategy:
+            matrix:
+                os: [ubuntu-latest, macos-latest]
+        runs-on: ${{ matrix.os }}
+
+        steps:
+            - uses: actions/checkout@v2
+            - name: Clone emacs
+              run: |
+                  git clone -b feature/native-comp --single-branch https://github.com/emacs-mirror/emacs
+                  cd emacs
+
+            - name: prepare build(linux)
+              if: ${{ matrix.os == 'ubuntu-latest' }}
+              run: |
+                  sudo apt install -y build-essential texinfo libx11-dev libxpm-dev libjpeg-dev libpng-dev libgif-dev libtiff-dev libgtk2.0-dev libncurses-dev automake autoconf
+
+            - name: prepare build(mac)
+              if: ${{ matrix.os == 'macos-latest' }}
+              run: |
+                  # xcode-select --install ## Alreay Installed
+                  brew install texinfo libx11 libxpm jpeg libpng giflib libtiff gtk+3 ncurses automake autoconf
+
+                  # https://github.com/memkind/memkind/issues/33
+                  alias nproc="sysctl -n hw.logicalcpu"
+
+            - name: build
+              run: |
+                  ./autogen.sh && RUSTFLAGS="-Dwarnings" WERROR_CFLAGS='-Werror -Wno-error=deprecated-declarations'
+                  ./configure --enable-checking=glyphs
+                  make -j$(nproc)
