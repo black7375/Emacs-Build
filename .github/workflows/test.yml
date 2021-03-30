@@ -18,13 +18,13 @@ jobs:
             - name: prepare build(linux)
               if: ${{ matrix.os == 'ubuntu-latest' }}
               run: |
-                  sudo apt install -y build-essential texinfo libx11-dev libxpm-dev libjpeg-dev libpng-dev libgif-dev libtiff-dev libgtk2.0-dev libncurses-dev automake autoconf
+                sudo apt install -y build-essential libgnutls28-dev texinfo libx11-dev libxpm-dev libjpeg-dev libpng-dev libgif-dev libtiff-dev libgtk2.0-dev libncurses-dev automake autoconf
 
             - name: prepare build(mac)
               if: ${{ matrix.os == 'macos-latest' }}
               run: |
                   # xcode-select --install ## Alreay Installed
-                  brew install texinfo libx11 libxpm jpeg libpng giflib libtiff gtk+3 ncurses automake autoconf
+                  brew install gnutls texinfo libx11 libxpm jpeg libpng giflib libtiff gtk+3 ncurses automake autoconf
 
                   # https://github.com/memkind/memkind/issues/33
                   alias nproc="sysctl -n hw.logicalcpu"
