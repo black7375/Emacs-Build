@@ -14,7 +14,6 @@ jobs:
             - name: Clone emacs
               run: |
                   git clone -b feature/native-comp --single-branch https://github.com/emacs-mirror/emacs
-                  cd emacs
 
             - name: prepare build(linux)
               if: ${{ matrix.os == 'ubuntu-latest' }}
@@ -43,6 +42,7 @@ jobs:
                   export CFLAGS+="-Werror -Wno-error=deprecated-declarations"
                   export CXXFLAGS+="-Werror -Wno-error=deprecated-declarations"
 
+                  cd emacs
                   ./autogen.sh
                   ./configure --enable-checking=glyphs
                   make -j$(nproc)
