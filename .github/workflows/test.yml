@@ -37,10 +37,10 @@ jobs:
                   export LD="/usr/bin/lld" ;
                   export AR="/usr/bin/llvm-ar" ;
                   export AS="/usr/bin/llvm-as" ;
-                  export CCFLAGS+=' -fuse-ld=lld' ;
-                  export CXXFLAGS+=' -fuse-ld=lld' ;
-                  export CFLAGS+="-Werror -Wno-error=deprecated-declarations"
-                  export CXXFLAGS+="-Werror -Wno-error=deprecated-declarations"
+                  # export CCFLAGS+=' -fuse-ld=lld' ;
+                  # export CXXFLAGS+=' -fuse-ld=lld' ;
+                  # export CFLAGS+="-Werror -Wno-error=deprecated-declarations"
+                  # export CXXFLAGS+="-Werror -Wno-error=deprecated-declarations"
 
                   cd emacs
                   ./autogen.sh
