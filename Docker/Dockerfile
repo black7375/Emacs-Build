@@ -2,10 +2,13 @@
 # Dockerfile for custom Arch Linux base to be as small as possible
 #
 # Currently 119 MB
+# Based On
+# https://github.com/dock0/arch
+# https://github.com/yantis/docker-archlinux-tiny
 ############################################################
 
-FROM dock0/arch
-MAINTAINER Jonathan Yantis <yantis@yantis.net>
+# FROM dock0/arch
+MAINTAINER alstjr7375 <alstjr7375@daum.net>
 
 ENV TERM xterm
 WORKDIR /tmp
