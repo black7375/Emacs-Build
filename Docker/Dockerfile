@@ -8,6 +8,7 @@
 ############################################################
 
 # FROM dock0/arch
+FROM docker.pkg.github.com/dock0/arch/arch
 MAINTAINER alstjr7375 <alstjr7375@daum.net>
 
 ENV TERM xterm
