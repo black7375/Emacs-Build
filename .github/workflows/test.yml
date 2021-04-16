@@ -13,7 +13,7 @@ jobs:
             - uses: actions/checkout@v2
             - name: Clone emacs
               run: |
-                  git clone -b feature/native-comp --single-branch https://github.com/emacs-mirror/emacs
+                  git clone -b feature/native-comp https://github.com/emacs-mirror/emacs
 
             - name: prepare build(linux)
               if: ${{ matrix.os == 'ubuntu-latest' }}
@@ -31,12 +31,14 @@ jobs:
 
             - name: build
               run: |
-                  export CC="/usr/bin/clang" ;
-                  export CXX="/usr/bin/clang++" ;
-                  export CPP="/usr/bin/clang -E" ;
-                  export LD="/usr/bin/lld" ;
-                  export AR="/usr/bin/llvm-ar" ;
-                  export AS="/usr/bin/llvm-as" ;
+                  export CC="/usr/bin/clang"
+                  export CXX="/usr/bin/clang++"
+                  export CPP="/usr/bin/clang -E"
+                  export LD="/usr/bin/lld"
+                  export AR="/usr/bin/llvm-ar"
+                  export AS="/usr/bin/llvm-as"
+                  export CFLAGS="-g1 -O2"
+                  export CXXFLAGS="-g1 -O2"
                   # export CCFLAGS+=' -fuse-ld=lld' ;
                   # export CXXFLAGS+=' -fuse-ld=lld' ;
                   # export CFLAGS+="-Werror -Wno-error=deprecated-declarations"
