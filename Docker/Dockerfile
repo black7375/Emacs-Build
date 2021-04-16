@@ -30,23 +30,23 @@ RUN pacman -Syyu --noconfirm && \
     # echo "Server = http://repo.herecura.be/herecura-stable/\$arch" >> /etc/pacman.conf && \
 
     # Archlinux CN repo (has yaourt and sometimes other interesting tools)
-    echo "[archlinuxcn]" >> /etc/pacman.conf && \
-    echo "SigLevel = Optional TrustAll" >> /etc/pacman.conf && \
-    echo "Server = http://repo.archlinuxcn.org/\$arch" >> /etc/pacman.conf && \
+    # echo "[archlinuxcn]" >> /etc/pacman.conf && \
+    # echo "SigLevel = Optional TrustAll" >> /etc/pacman.conf && \
+    # echo "Server = http://repo.archlinuxcn.org/\$arch" >> /etc/pacman.conf && \
 
     # BlackArch
-    echo "[blackarch]" >> /etc/pacman.conf && \
-    echo "Server = http://mirror.clibre.uqam.ca/blackarch/\$repo/os/\$arch" >> /etc/pacman.conf && \
-    pacman-key -r 4345771566D76038C7FEB43863EC0ADBEA87E4E3 && \
-    pacman-key --lsign-key 4345771566D76038C7FEB43863EC0ADBEA87E4E3 && \
-    pacman-key -r 7533BAFE69A25079 && \
-    pacman-key --lsign-key 7533BAFE69A25079 && \
+    # echo "[blackarch]" >> /etc/pacman.conf && \
+    # echo "Server = http://mirror.clibre.uqam.ca/blackarch/\$repo/os/\$arch" >> /etc/pacman.conf && \
+    # pacman-key -r 4345771566D76038C7FEB43863EC0ADBEA87E4E3 && \
+    # pacman-key --lsign-key 4345771566D76038C7FEB43863EC0ADBEA87E4E3 && \
+    # pacman-key -r 7533BAFE69A25079 && \
+    # pacman-key --lsign-key 7533BAFE69A25079 && \
 
     # BBQLinux
-    echo "[bbqlinux]" >> /etc/pacman.conf && \
-    echo "Server = http://packages.bbqlinux.org/\$repo/os/\$arch" >> /etc/pacman.conf && \
-    pacman-key -r 04C0A941 && \
-    pacman-key --lsign-key 04C0A941 && \
+    # echo "[bbqlinux]" >> /etc/pacman.conf && \
+    # echo "Server = http://packages.bbqlinux.org/\$repo/os/\$arch" >> /etc/pacman.conf && \
+    # pacman-key -r 04C0A941 && \
+    # pacman-key --lsign-key 04C0A941 && \
 
     # Add multilib repo
     sed -i '/#\[multilib\]/,/#Include = \/etc\/pacman.d\/mirrorlist/ s/#//' /etc/pacman.conf && \
