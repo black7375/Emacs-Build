@@ -62,11 +62,19 @@ RUN pacman -Syyu --noconfirm && \
     pacman -Syyu --noconfirm && \
 
     # Install all the repo keyrings and mirrorlists
-    pacman --noconfirm -S archlinuxcn-keyring blackarch-keyring bbqlinux-keyring && \
+    # pacman --noconfirm -S archlinuxcn-keyring blackarch-keyring bbqlinux-keyring && \
 
     # Install yaourt, package-query and cower for easy AUR usage.
     # TODO make sure package query still exists later after yaourt uninstall
-    pacman -S --noconfirm yaourt package-query cower && \
+    # pacman -S --noconfirm yaourt package-query cower && \
+    YAY_VER=$(curl --silent "https://api.github.com/repos/Jguer/yay/releases/latest" \
+              | grep -Po '"tag_name": "\K.*?(?=")') && \
+    YAY_PKG=yay_${YAY_VER:1}_x86_64 && \
+    curl -fLO https://github.com/Jguer/yay/releases/download/${YAY_VER}/${YAY_PKG}.tar.gz && \
+    tar -xf ${YAY_PKG}.tar.gz && \
+    rm ${YAY_PKG}.tar.gz && \
+    YAY="$(pwd)/${YAY_PKG}/yay" && \
+    ls && \
 
     # TODO switch to rankmirrors since its built in for pacman.
     # Setup pacman to use the fastest mirrors.
@@ -89,7 +97,24 @@ RUN pacman -Syyu --noconfirm && \
     # runuser -l docker -c "yaourt --noconfirm -S texinfo-fake" && \
 
     # Install localepurge
-    runuser -l docker -c "yaourt --noconfirm -S localepurge" && \
+    # runuser -l docker -c "${YAY} --noconfirm -S localepurge" && \
+    pacman --noconfirm -S gettext sysfsutils && \
+    LOC_VER=$(curl --silent "https://api.github.com/repos/black7375/arch-localepurge/releases/latest" \
+              | grep -Po '"tag_name": "\K.*?(?=")') && \
+    LOC_PKG=localepurge-${LOC_VER:1}-0-any.pkg.tar.zst && \
+    curl -fLO https://github.com/black7375/arch-localepurge/releases/download/${LOC_VER}/${LOC_PKG} && \
+    pacman --noconfirm -U ${LOC_PKG} && \
+
+    # Clean localepurge
+    rm ${LOC_PKG} && \
+    unset LOC_VER && \
+    unset LOC_PKG && \
+
+    # Remove yay
+    rm -r ${YAY_PKG} && \
+    unset YAY_VER && \
+    unset YAY_PKG && \
+    unset YAY && \
 
     # Configure localepurge
     sed -i "s/NEEDSCONFIGFIRST/#NEEDSCONFIGFIRST/" /etc/locale.nopurge && \
@@ -116,7 +141,7 @@ RUN pacman -Syyu --noconfirm && \
     make \
     autoconf \
     # perl \
-    yaourt \
+    # yaourt \
     diffutils \
 
     # Remove other stuff
@@ -142,14 +167,14 @@ RUN pacman -Syyu --noconfirm && \
 
     # Remove stuff that still needs subitems
     pacman --noconfirm -R \
-    util-linux \
+    # util-linux \ need systemd
     fakeroot \
-    shadow && \
+    # shadow && \ need util-linux
 
 
     # Remove ducktape & shim & leftover mirrorstatus.
      # rm -r /.ducktape /.shim && \
-     rm /tmp/.root.mirrorstatus.json && \
+     # rm /tmp/.root.mirrorstatus.json && \
 
 ##########################################################################
 # CLEAN UP SECTION - THIS GOES AT THE END                                #
@@ -174,11 +199,11 @@ RUN pacman -Syyu --noconfirm && \
     # Remove anything left in temp.
     rm -r /tmp/* && \
 
-    pacman -S --noconfirm awk && \
+    pacman -S --noconfirm awk pacman-contrib && \
     bash -c "echo 'y' | pacman -Scc >/dev/null 2>&1" && \
     paccache -rk0 >/dev/null 2>&1 &&  \
-    pacman-optimize && \
-    pacman -Runs --noconfirm gawk tar && \
+    # pacman-optimize && \
+    pacman -Runs --noconfirm gawk tar pacman-contrib && \
     rm -r /var/lib/pacman/sync/*
 
 #########################################################################
